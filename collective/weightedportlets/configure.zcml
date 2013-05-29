@@ -27,15 +27,6 @@
       />
 
   <browser:page
-      for="*"
-      name="inlineChangePortletWeight"
-      class=".kss.PortletManagerKSS"
-      attribute="change_portlet_weight"
-      permission="plone.app.portlets.ManageOwnPortlets"
-      layer=".interfaces.IProductLayer"
-      />
-
-  <browser:page
       name="portlet-weight-info"
       for="*"
       class=".editmanager.PortletWeightInfo"
