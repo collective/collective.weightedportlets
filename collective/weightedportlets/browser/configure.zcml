@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.weightedportlets.">
+
+    <include package="plone.app.registry" />
+
+    <!-- Resource directory for javascripts -->
+    <browser:resourceDirectory
+        name="collective.weightedportlets.javascripts"
+        directory="javascripts"
+        layer="..interfaces.IProductLayer"
+        />
+
+</configure>
