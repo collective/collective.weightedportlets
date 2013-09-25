@@ -1,6 +1,8 @@
 1.1 (unreleased)
 ----------------
 
+* Added Ajax version of portlet handler
+  [AdCastle]
 
 1.0 (2009-10-12)
 ----------------
