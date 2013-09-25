@@ -17,20 +17,13 @@
       />
 
   <include package="plone.app.portlets"/>
+  <include package=".browser" />
+
 
   <browser:page
       for="*"
       name="manage-portlets-macros"
       class=".editmanager.ManageContextualPortlets"
-      permission="plone.app.portlets.ManageOwnPortlets"
-      layer=".interfaces.IProductLayer"
-      />
-
-  <browser:page
-      for="*"
-      name="inlineChangePortletWeight"
-      class=".kss.PortletManagerKSS"
-      attribute="change_portlet_weight"
       permission="plone.app.portlets.ManageOwnPortlets"
       layer=".interfaces.IProductLayer"
       />
@@ -44,9 +37,11 @@
       layer=".interfaces.IProductLayer"
       />
 
-  <browser:resource
-      name="manage-portlets.kss"
-      file="portlets.kss"
+  <browser:page
+      name="assign-weight-info"
+      for="*"
+      class=".editmanager.AssignPortletWeight"
+      permission="plone.app.portlets.ManageOwnPortlets"
       layer=".interfaces.IProductLayer"
       />
 
