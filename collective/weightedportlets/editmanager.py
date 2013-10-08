@@ -16,7 +16,7 @@ class AssignPortletWeight(BrowserView):
     """Opertions on portlets done which used to be done with KSS
        now its applied by a BrowserView and some AJAX
     """
-    def WeightedMessage(self, message):
+    def weighted_message(self, message):
         """ Outputting some HTML to place the message in """
         return '<div class="weightedmessage">' + message + '</div>'
 
@@ -30,9 +30,9 @@ class AssignPortletWeight(BrowserView):
             weight = int(weight)
         except ValueError:
             err = 'Error: You must enter an integer for the portlet weight'
-            return self.WeightedMessage(err)
+            return self.weighted_message(err)
         if not portlethash:
-            return self.WeightedMessage('Error saving data.')
+            return self.weighted_message('Error saving data.')
 
         info = unhashPortletInfo(portlethash)
         assignments = assignment_mapping_from_key(self.context,
@@ -44,7 +44,7 @@ class AssignPortletWeight(BrowserView):
         if not hasattr(assignments[name], ATTR):
             setattr(assignments[name], ATTR, PersistentDict())
         getattr(assignments[name], ATTR)['weight'] = weight
-        return self.WeightedMessage('Weighting saved')
+        return self.weighted_message('Weighting saved')
 
 
 class PortletWeightInfo(BrowserView):
