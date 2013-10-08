@@ -18,7 +18,7 @@
 
   <include package="plone.app.portlets"/>
   <include package=".browser" />
-
+  <include file="upgrades.zcml" />
 
   <browser:page
       for="*"
