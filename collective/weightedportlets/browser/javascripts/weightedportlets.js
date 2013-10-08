@@ -15,7 +15,7 @@ function assignPortletWeight(weight) {
              return 'error';
          }
     }).responseText;
-    return assignW
+    return assignW;
 }
 
 $(document).ready(function() {
@@ -24,14 +24,14 @@ $(document).ready(function() {
            var portletid = ($(this).closest('.portlets-manager').attr('id'));
            if($('.weightedmessage').length > 0) {
               $('.weightedmessage').remove();
-           };
+           }
            var weights = $('#'+portletid+' .portlet');
            for (var i = 0; i < weights.length; ++i) {
               var assignWeight = assignPortletWeight(weights[i]);
               if (assignWeight.indexOf('Error') > -1) {
                   return false;
-              };
+              }
            }
        });
-    };
+    }
 });
