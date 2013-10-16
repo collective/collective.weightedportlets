@@ -3,7 +3,8 @@ from persistent.dict import PersistentDict
 from collective.weightedportlets import ATTR
 
 
-class WeightWatchingPortletAssignmentImportExportHandler(PropertyPortletAssignmentExportImportHandler):
+class WeightWatchingPortletAssignmentImportExportHandler(
+        PropertyPortletAssignmentExportImportHandler):
 
     def import_weight(self, node):
         try:
@@ -23,8 +24,10 @@ class WeightWatchingPortletAssignmentImportExportHandler(PropertyPortletAssignme
 
     def import_assignment(self, interface, node):
         self.import_weight(node)
-        PropertyPortletAssignmentExportImportHandler.import_assignment(self, interface, node)
+        PropertyPortletAssignmentExportImportHandler.import_assignment(
+            self, interface, node)
 
     def export_assignment(self, interface, doc, node):
         self.export_weight(doc, node)
-        PropertyPortletAssignmentExportImportHandler.export_assignment(self, interface, doc, node)
+        PropertyPortletAssignmentExportImportHandler.export_assignment(
+            self, interface, doc, node)
