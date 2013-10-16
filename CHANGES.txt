@@ -1,8 +1,8 @@
 1.1 (unreleased)
 ----------------
 
-* Added Ajax version of portlet handler
-  [AdCastle]
+* Submit changes to portlet weights using jQuery rather than KSS.
+  [AdCastle, davisagli]
 
 1.0 (2009-10-12)
 ----------------

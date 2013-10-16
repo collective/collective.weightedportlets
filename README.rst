@@ -1,7 +1,7 @@
 Introduction
 ============
 
-The Plone 3 portlets system gives site managers a powerful system for assigning
+The Plone portlets system gives site managers a powerful system for assigning
 portlets to different sections, content types, and groups.  However, there is a
 predefined order in which portlets coming from these sources are displayed. So
 there is no built-in way to, for instance, specify that one contextual portlet
@@ -19,7 +19,7 @@ So, for example, if I wanted to display one contextual portlet above all
 inherited portlets and one contextual portlet below all inherited portlets,
 I could set their weights to 40 and 60 respectively.
 
-Note that adjustments to the portlet order are saved via a KSS action; you
+Note that adjustments to the portlet order are saved via an AJAX request; you
 don't have to press a button and reload the page to save the new weights.
 
 Import and export of portlet assignment weights via GenericSetup is also
@@ -31,7 +31,7 @@ Installation
 
 Add the collective.weightedportlets egg to your buildout.  If using Plone
 3.1 or 3.2, make sure you add its ZCML as well.  The ZCML should be
-loaded automatically in Plone 3.3.
+loaded automatically in Plone >= 3.3.
 
 Start Zope and install "Weighted Portlet Ordering" via the Add/Remove Products
 panel in Site Setup.
@@ -40,14 +40,13 @@ panel in Site Setup.
 Compatibility
 =============
 
-This product requires Plone 3.1 or greater.  Tested with Plone 3.2.
+This product requires Plone 3.1 or greater.
 
 This product operates by overriding the following parts of the portlet
 machinery.  You may run into problems if using other products or custom
 code that also overrides these components:
 
 * the template macros used to render the portlet management UI
-* the manage-portlets.kss resource
 * the IPortletRetriever adapter
 * the IPortletAssignmentExportImportHandler adapter
 
@@ -68,6 +67,6 @@ Self-certification
 Credits
 =======
 
-David Glick, ONE/Northwest [davisagli]
+David Glick [davisagli]
 
 Thanks to Martin Aspeli for the Plone 3 portlet system.
