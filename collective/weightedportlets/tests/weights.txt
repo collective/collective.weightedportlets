@@ -1,26 +1,78 @@
 
 Imports.
   >>> from zope.component import getUtility, getAdapter, getMultiAdapter
-  >>> from plone.portlets.interfaces import IPortletManager, IPortletRetriever
+  >>> from plone.portlets.interfaces import IPortletManager, IPortletRetriever, IPortletAssignmentMapping
   >>> from plone.portlets.utils import hashPortletInfo
-  >>> from collective.weightedportlets.tests.base import browser
   >>> from Products.GenericSetup.tests.common import DummyImportContext, DummyExportContext
   >>> from plone.app.portlets.exportimport.portlets import importPortlets, exportPortlets
   >>> from plone.app.portlets.exportimport.interfaces import IPortletAssignmentExportImportHandler
   >>> from collective.weightedportlets import ATTR
 
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> from plone.app.testing import TEST_USER_NAME
+  >>> from plone.app.testing import TEST_USER_PASSWORD
+  >>> from plone.app.testing import SITE_OWNER_NAME
+  >>> from plone.app.testing import SITE_OWNER_PASSWORD
+  >>> from plone.testing.z2 import Browser
+
 Portlet weighting
 =================
 
-Check the initial listing of portlets in the left column at the site root.
-  >>> view = self.portal.restrictedTraverse('@@plone')
-  >>> manager = getUtility(IPortletManager, name='plone.leftcolumn', context=self.portal)
-  >>> retriever = getMultiAdapter((self.portal, manager), IPortletRetriever)
-  >>> u'navigation' in [p['name'] for p in retriever.getPortlets()]
+Here we kick off the ZOPE test browser package.
+
+  >>> app = layer['app']
+  >>> portal = layer['portal']
+  >>> 'collective.weightedportlets' in [x.get('id') for x in portal.portal_quickinstaller.listInstalledProducts()]
+  True    
+  >>> portal_url = portal.absolute_url()
+  >>> portal_url
+  'http://nohost/plone'
+
+  >>> browser = Browser(app)
+  >>> browser.open(portal_url + '/login')
+  >>> browser.getControl(name='__ac_name').value = SITE_OWNER_NAME
+  >>> browser.getControl(name='__ac_password').value = SITE_OWNER_PASSWORD
+  >>> browser.getControl(name='submit').click()
+
+Did we manage to log in correctly
+
+  >>> "You are now logged in" in browser.contents
   True
 
-Add a new portlet so we can compare relative weights.
-  >>> context = DummyImportContext(self.portal, purge=False)
+  >>> browser.open(portal_url)
+  >>> browser.url == portal_url
+  True
+
+  >>> view = portal.restrictedTraverse('@@plone')
+  >>> manager = getUtility(IPortletManager, name='plone.leftcolumn', context=portal)
+  >>> retriever = getMultiAdapter((portal, manager), IPortletRetriever)
+  >>> [p['name'] for p in retriever.getPortlets()]
+  []
+
+Lets add a portlet - Use the 'Add portlet' select box to add a login portlet.
+
+  >>> browser.open(portal_url + "/@@manage-portlets")
+  >>> leftcolumn_form = browser.getForm(index=1)
+  >>> add_portlet_select = leftcolumn_form.getControl(name=":action", index=0)
+  >>> val = "/++contextportlets++plone.leftcolumn/+/portlets.Login"
+  >>> add_portlet_select.getControl(value=val).selected = True
+  >>> leftcolumn_form.submit()
+  >>> '<input type="text" size="1" class="weight" title="Portlet Weight" value="50" />' in browser.contents
+  True
+
+Now we call the AJAX action which would normally be triggered by Javascript, lets check that it errors out on strings
+  >>> browser.open(portal_url + "/@@manage-portlets")
+  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='login', key='/plone'))
+  >>> url = 'http://nohost/plone/@@assign-weight-info?weight=a&portlethash='+portlethash
+  >>> browser.open(url)
+  >>> 'Error: You must enter an integer for the portlet weight' in browser.contents
+  True
+
+GenericSetup Import/Export
+==========================
+
+Portlet weights can be included when loading portlet assignments using GenericSetup.
+  >>> context = DummyImportContext(portal, purge=False)
   >>> context._files['portlets.xml'] = """<?xml version="1.0"?>
   ... <portlets>
   ...    <assignment
@@ -33,64 +85,29 @@ Add a new portlet so we can compare relative weights.
   ...    />
   ... </portlets>"""
   >>> importPortlets(context)
-  >>> [p['name'] for p in retriever.getPortlets()]
-  [u'testportlet', u'navigation'...
-
-Open the portlet management screen.
-  >>> browser.open('http://nohost/plone/@@manage-portlets')
-
-Make sure there is a weight input for each portlet.
-  >>> print browser.contents
-  <!DOCTYPE...
-  <input type="text" size="1" class="weight" title="Portlet Weight" value="40" />
-  ...
-  <input type="text" size="1" class="weight" title="Portlet Weight" value="50" />
-  ...
-
-Now we call the KSS action which would normally be triggered by Javascript
-when the weight input is changed.  We'll lower the weight of the navigation portlet...
-  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='navigation', key='/plone'))
-  >>> browser.open('http://nohost/plone/@@inlineChangePortletWeight?portlethash=%s&viewname=%s&weight=%s' % (portlethash, 'manage-portlets', 30))
-  >>> 'replaceInnerHTML' in browser.contents
-  True
-
-(If we try to set a value that isn't an integer, we'll get an error message.)
-  >>> browser.open('http://nohost/plone/@@inlineChangePortletWeight?portlethash=%s&viewname=%s&weight=%s' % (portlethash, 'manage-portlets', 'a'))
-  >>> 'You must enter an integer for the portlet weight.' in browser.contents
-  True
-
-Now confirm that the login portlet gets sorted above the navigation portlet.
-  >>> [p['name'] for p in retriever.getPortlets()]
-  [u'navigation', u'testportlet'...
-
-
-GenericSetup Import/Export
-==========================
-
-Portlet weights can be included when loading portlet assignments using GenericSetup.
   >>> portlets = retriever.getPortlets()
-  >>> [p['name'] for p in portlets][1]
-  u'testportlet'
-  >>> getattr(portlets[1]['assignment'], ATTR, {}).get('weight')
+  >>> [p['name'] for p in portlets]
+  [u'testportlet', u'label_log_in']
+
+  >>> getattr(portlets[0]['assignment'], ATTR, {}).get('weight')
   40
 
 And they are also included when exporting portlet assignments.
-  >>> context = DummyExportContext(self.portal)
+  >>> context = DummyExportContext(portal)
   >>> exportPortlets(context)
-  >>> print context._wrote[0][1]
-  <?xml...<assignment name="testportlet" category="context" key="/" manager="plone.leftcolumn" type="portlets.Calendar"...weight="40"/>...
-
+  >>> """<assignment name="testportlet" category="context" key="/"\n    manager="plone.leftcolumn" type="portlets.Calendar" visible="True"\n    weight="40"/>\n""" in context._wrote[0][1]
+  True
 
 Uninstallation
 ==============
 
 Uninstall the product.
-  >>> self.portal.portal_quickinstaller.uninstallProducts(['collective.weightedportlets'])
+  >>> portal.portal_quickinstaller.uninstallProducts(['collective.weightedportlets'])
 
 Now make sure that our local override of the portlet retriever has been removed.
-  >>> getMultiAdapter((self.portal, manager), IPortletRetriever)
+  >>> getMultiAdapter((portal, manager), IPortletRetriever)
   <plone.portlets.retriever.PortletRetriever object at ...>
 
 And same for the override of the assignment importer/exporter.
-  >>> getAdapter(self.portal, IPortletAssignmentExportImportHandler)
+  >>> getAdapter(portal, IPortletAssignmentExportImportHandler)
   <plone.app.portlets.exportimport.portlets.PropertyPortletAssignmentExportImportHandler object at ...>

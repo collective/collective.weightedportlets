@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.weightedportlets">
+
+    <genericsetup:upgradeStep
+        title="remove KSS and add Ajax function for weighting scores"
+        description="Install JS declaration for Ajax weighting"
+        source="1001"
+        destination="1002"
+        handler=".upgrades.upgrade_from_kss"
+        sortkey="1"
+        profile="collective.weightedportlets:default"
+    />
+
+</configure>
