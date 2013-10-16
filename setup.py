@@ -19,8 +19,6 @@ long_description = (
     read('CHANGES.txt')
     )
 
-tests_require=['zope.testing']
-
 setup(name='collective.weightedportlets',
       version=version,
       description="Adds the ability to tweak portlet ordering by giving each portlet a weight.",
@@ -45,9 +43,7 @@ setup(name='collective.weightedportlets',
                         'plone.app.portlets',
                         # -*- Extra requirements: -*-
                         ],
-      tests_require=tests_require,
-      extras_require=dict(test=tests_require),
-      test_suite = 'collective.weightedportlets.tests.test_docs.test_suite',
+      extras_require=dict(test=['plone.app.testing']),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
