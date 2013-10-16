@@ -6,8 +6,8 @@
     <genericsetup:upgradeStep
         title="remove KSS and add Ajax function for weighting scores"
         description="Install JS declaration for Ajax weighting"
-        source="1000"
-        destination="1001"
+        source="1001"
+        destination="1002"
         handler=".upgrades.upgrade_from_kss"
         sortkey="1"
         profile="collective.weightedportlets:default"
