@@ -8,6 +8,7 @@
         description=""
         source="1.0"
         destination="1000"
+        profile="collective.weightedportlets:default"
         import_steps="jsregistry"
     />
 
