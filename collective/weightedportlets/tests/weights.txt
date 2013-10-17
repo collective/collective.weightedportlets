@@ -57,8 +57,9 @@ Lets add a portlet - Use the 'Add portlet' select box to add a login portlet.
   >>> val = "/++contextportlets++plone.leftcolumn/+/portlets.Login"
   >>> add_portlet_select.getControl(value=val).selected = True
   >>> leftcolumn_form.submit()
-  >>> '<input type="text" size="2" class="weight" title="Portlet Weight" value="50" data-portlethash="' in browser.contents
-  True
+  >>> print browser.contents
+  <BLANKLINE>
+  ...<input type="text" size="2" class="weight" title="Portlet Weight" data-portlethash="..." value="50" />...
 
 Now we call the AJAX action which would normally be triggered by Javascript, lets check that it errors out on strings
   >>> browser.open(portal_url + "/@@manage-portlets")
