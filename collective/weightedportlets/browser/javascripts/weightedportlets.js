@@ -1,37 +1,17 @@
-function assignPortletWeight(weight) {
-    var portlet = $(weight);
-    var data = {'weight': portlet.find('input.weight').val(),
-                'portlethash': portlet.attr('data-portlethash')};
-    var assignW = $.ajax({
-         data: data,
-         type: "GET",
-         async: false,
-         url: "@@assign-weight-info",
-         success: function(html) {
-             portlet.prepend(html);
-         },
-         error: function(){
-             portlet.prepend('Error saving weightings');
-             return 'error';
-         }
-    }).responseText;
-    return assignW;
-}
-
 $(document).ready(function() {
-    if($('.portletAssignments .weight').length > 0) {
-       $('.portletAssignments form').submit(function(e) {
-           var portletid = ($(this).closest('.portlets-manager').attr('id'));
-           if($('.weightedmessage').length > 0) {
-              $('.weightedmessage').remove();
-           }
-           var weights = $('#'+portletid+' .portlet');
-           for (var i = 0; i < weights.length; ++i) {
-              var assignWeight = assignPortletWeight(weights[i]);
-              if (assignWeight.indexOf('Error') > -1) {
-                  return false;
-              }
-           }
-       });
-    }
+  if($('.portletAssignments .weight').length > 0) {
+    $('.portletAssignments .weight').blur(function() {
+      $('.weightedmessage').remove();
+      var portlet = $(this).closest('.portlet');
+      $.post('@@assign-weight-info',
+        {'weight': $(this).val(), 'portlethash': $(this).attr('data-portlethash')},
+        function(html) {
+          if (html) { portlet.prepend(html); }
+        },
+        function() {
+          portlet.prepend('Error saving weighting');
+        }
+      );
+    });
+  }
 });

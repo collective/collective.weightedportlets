@@ -44,7 +44,7 @@ class AssignPortletWeight(BrowserView):
         if not hasattr(assignments[name], ATTR):
             setattr(assignments[name], ATTR, PersistentDict())
         getattr(assignments[name], ATTR)['weight'] = weight
-        return self.weighted_message('Weighting saved')
+        return ''
 
 
 class PortletWeightInfo(BrowserView):
@@ -63,10 +63,10 @@ class ManageContextualPortlets(base.ManageContextualPortlets):
         regexp=r'<span class="managedPortletActions">',
         replacement="""
         <span class="managedPortletActions">
-        <input type="text" size="1" class="weight" title="Portlet Weight"
+        <input type="text" size="2" class="weight" title="Portlet Weight"
             tal:define="weight_info nocall:context/@@portlet-weight-info"
             tal:attributes="value python:weight_info.portlet_weight(view,
-             repeat['portlet'].index)"
+             repeat['portlet'].index); data-portlethash portlet/hash;"
             i18n:domain="collective.weightedportlets"
             i18n:attributes="title"/>
         """
