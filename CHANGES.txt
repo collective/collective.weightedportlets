@@ -1,4 +1,4 @@
-1.1 (unreleased)
+1.1 (2013-10-16)
 ----------------
 
 * Submit changes to portlet weights using jQuery rather than KSS.
@@ -6,6 +6,7 @@
   This makes the addon compatible with Plone 4.3.
 
   You must run the upgrade step to install the javascript.
+  
   [AdCastle, davisagli]
 
 1.0 (2009-10-12)
