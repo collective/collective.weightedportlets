@@ -1,6 +1,14 @@
 Introduction
 ============
 
+.. image:: https://secure.travis-ci.org/collective/collective.weightedportlets.png?branch=master
+    :alt: Travis CI badge
+    :target: http://travis-ci.org/collective/collective.weightedportlets
+
+.. image:: https://pypip.in/d/collective.weightedportlets/badge.png
+    :alt: Downloads
+    :target: https://pypi.python.org/pypi/collective.weightedportlets
+
 The Plone portlets system gives site managers a powerful system for assigning
 portlets to different sections, content types, and groups.  However, there is a
 predefined order in which portlets coming from these sources are displayed. So
