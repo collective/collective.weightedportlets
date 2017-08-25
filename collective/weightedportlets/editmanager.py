@@ -35,10 +35,12 @@ class AssignPortletWeight(BrowserView):
             return self.weighted_message('Error saving data.')
 
         info = unhashPortletInfo(portlethash)
+        # key needs to be converted to str as unicode paths are not accepted
+        # in restrictedTraverse called in assignment_mapping_from_key
         assignments = assignment_mapping_from_key(self.context,
                                                   info['manager'],
                                                   info['category'],
-                                                  info['key'])
+                                                  info['key'].encode())
         IPortletPermissionChecker(assignments.__of__(aq_inner(self.context)))()
         name = info['name']
         if not hasattr(assignments[name], ATTR):
