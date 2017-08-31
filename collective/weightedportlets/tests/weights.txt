@@ -88,7 +88,7 @@ Portlet weights can be included when loading portlet assignments using GenericSe
   >>> importPortlets(context)
   >>> portlets = retriever.getPortlets()
   >>> [p['name'] for p in portlets]
-  [u'testportlet', u'label_log_in']
+  ['testportlet', 'label_log_in']
 
   >>> getattr(portlets[0]['assignment'], ATTR, {}).get('weight')
   40
