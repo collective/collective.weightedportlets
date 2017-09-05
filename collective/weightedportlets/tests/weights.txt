@@ -61,13 +61,40 @@ Lets add a portlet - Use the 'Add portlet' select box to add a login portlet.
   <BLANKLINE>
   ...<input type="text" size="2" class="weight" title="Portlet Weight" data-portlethash="..." value="50" />...
 
-Now we call the AJAX action which would normally be triggered by Javascript, lets check that it errors out on strings
+Now we call the AJAX action which would normally be triggered by Javascript, lets check that weight works
   >>> browser.open(portal_url + "/@@manage-portlets")
-  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='login', key='/plone'))
+  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='label_log_in', key='/plone'))
+  >>> url = 'http://nohost/plone/@@assign-weight-info?weight=42&portlethash='+portlethash
+  >>> browser.open(url)
+  >>> browser.contents == ''
+  True
+
+Now lets check that it errors out on strings
+  >>> browser.open(portal_url + "/@@manage-portlets")
+  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='label_log_in', key='/plone'))
   >>> url = 'http://nohost/plone/@@assign-weight-info?weight=a&portlethash='+portlethash
   >>> browser.open(url)
   >>> 'Error: You must enter an integer for the portlet weight' in browser.contents
   True
+
+Now lets check that weight also works for portlet not on the root
+  >>> browser.open(portal_url + "/myfolder/@@manage-portlets")
+  >>> leftcolumn_form = browser.getForm(index=1)
+  >>> add_portlet_select = leftcolumn_form.getControl(name=":action", index=0)
+  >>> val = "/++contextportlets++plone.leftcolumn/+/portlets.Login"
+  >>> add_portlet_select.getControl(value=val).selected = True
+  >>> leftcolumn_form.submit()
+  >>> print browser.contents
+  <BLANKLINE>
+  ...<input type="text" size="2" class="weight" title="Portlet Weight" data-portlethash="..." value="50" />...
+
+  >>> browser.open(portal_url + "/myfolder/@@manage-portlets")
+  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='label_log_in', key='/plone/myfolder'))
+  >>> url = 'http://nohost/plone/myfolder/@@assign-weight-info?weight=42&portlethash='+portlethash
+  >>> browser.open(url)
+  >>> browser.contents == ''
+  True
+
 
 GenericSetup Import/Export
 ==========================
@@ -88,7 +115,7 @@ Portlet weights can be included when loading portlet assignments using GenericSe
   >>> importPortlets(context)
   >>> portlets = retriever.getPortlets()
   >>> [p['name'] for p in portlets]
-  [u'testportlet', u'label_log_in']
+  ['testportlet', 'label_log_in']
 
   >>> getattr(portlets[0]['assignment'], ATTR, {}).get('weight')
   40
