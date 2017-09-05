@@ -1,0 +1,10 @@
+include *.py
+include *.txt
+include buildout.cfg
+recursive-include collective *.js
+recursive-include collective *.py
+recursive-include collective *.txt
+recursive-include collective *.xml
+recursive-include collective *.zcml
+recursive-include docs *.GPL
+recursive-include docs *.txt
