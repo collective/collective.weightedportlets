@@ -61,9 +61,17 @@ Lets add a portlet - Use the 'Add portlet' select box to add a login portlet.
   <BLANKLINE>
   ...<input type="text" size="2" class="weight" title="Portlet Weight" data-portlethash="..." value="50" />...
 
-Now we call the AJAX action which would normally be triggered by Javascript, lets check that it errors out on strings
+Now we call the AJAX action which would normally be triggered by Javascript, lets check that it weight works
   >>> browser.open(portal_url + "/@@manage-portlets")
-  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='login', key='/plone'))
+  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='label_log_in', key='/plone'))
+  >>> url = 'http://nohost/plone/@@assign-weight-info?weight=42&portlethash='+portlethash
+  >>> browser.open(url)
+  >>> browser.contents == ''
+  True
+
+Now lets check that it errors out on strings
+  >>> browser.open(portal_url + "/@@manage-portlets")
+  >>> portlethash = hashPortletInfo(dict(manager='plone.leftcolumn', category='context', name='label_log_in', key='/plone'))
   >>> url = 'http://nohost/plone/@@assign-weight-info?weight=a&portlethash='+portlethash
   >>> browser.open(url)
   >>> 'Error: You must enter an integer for the portlet weight' in browser.contents
