@@ -5,19 +5,16 @@ cache:
   directories:
     - eggs
 env:
-  - PLONE_VERSION=4.2
   - PLONE_VERSION=4.3
   - PLONE_VERSION=5.0
 matrix:
-  include:
-    - python: 2.6
-      env: PLONE_VERSION=4.1
   allow_failures:
     - env: PLONE_VERSION=5.0
   fast_finish: true
 install:
   - sed -ie "s#test-4#test-$PLONE_VERSION#" buildout.cfg
-  - python bootstrap.py
+  - pip install setuptools==33.1.1
+  - python bootstrap.py --buildout-version=2.9.4
   - bin/buildout annotate
   - bin/buildout -Nq
 before_script:
