@@ -5,6 +5,7 @@ from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import applyProfile
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import FunctionalTesting
+from plone.app.testing import setRoles, TEST_USER_ID
 
 
 class CollectiveWeightedPortlets(PloneSandboxLayer):
@@ -27,6 +28,9 @@ class CollectiveWeightedPortlets(PloneSandboxLayer):
             portal.portal_membership.addMember(memberid,
                                                'secret',
                                                roles, [])
+        # adding a folder
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        portal.invokeFactory('Folder', id='myfolder')
 
 
 COLLECTIVEWEIGHTEDPORTLETS_FIXTURE = CollectiveWeightedPortlets()
