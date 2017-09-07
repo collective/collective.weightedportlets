@@ -16,6 +16,7 @@ class AssignPortletWeight(BrowserView):
     """Opertions on portlets done which used to be done with KSS
        now its applied by a BrowserView and some AJAX
     """
+
     def weighted_message(self, message):
         """ Outputting some HTML to place the message in """
         return '<div class="weightedmessage">' + message + '</div>'
@@ -40,7 +41,7 @@ class AssignPortletWeight(BrowserView):
         assignments = assignment_mapping_from_key(self.context,
                                                   info['manager'],
                                                   info['category'],
-                                                  info['key'].encode())
+                                                  info['key'].encode('utf-8'))
         IPortletPermissionChecker(assignments.__of__(aq_inner(self.context)))()
         name = info['name']
         if not hasattr(assignments[name], ATTR):
