@@ -43,7 +43,7 @@ setup(name='collective.weightedportlets',
                         'plone.app.portlets',
                         # -*- Extra requirements: -*-
                         ],
-      extras_require=dict(test=['plone.app.testing']),
+      extras_require=dict(test=['plone.app.testing', 'unittest2']),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
