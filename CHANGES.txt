@@ -1,7 +1,9 @@
-1.3 (unreleased)
+2.0 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added compatibility with Plone 5,
+  dropped compatibility with Plone 4.
+  [davisagli]
 
 
 1.2 (2017-09-05)
