@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<registry>
+
+  <records prefix="plone.resources/collective-weightedportlets"
+           interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+    <value key="js">++resource++collective.weightedportlets.javascripts/weightedportlets.js</value>
+  </records>
+
+  <records prefix="plone.bundles/collective-weightedportlets"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="resources">
+      <element>collective-weightedportlets</element>
+    </value>
+    <value key="compile">False</value>
+    <value key="merge_with"></value>
+    <value key="enabled">True</value>
+    <value key="depends">plone</value>
+    <value key="stub_js_modules">
+      <element>jquery</element>
+    </value>
+    <value key="jscompilation">++resource++collective.weightedportlets.javascripts/weightedportlets-compiled.js</value>
+    <value key="csscompilation"></value>
+    <value key="last_compilation"></value>
+  </records>
+</registry>
